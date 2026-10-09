@@ -1,0 +1,4 @@
+.env
+responses/
+__pycache__/
+.venv/

@@ -1,0 +1,55 @@
+# B2B production API checks.
+# - Secrets: write ${ENV_VAR} — the value comes from GitHub Secrets (or .env locally).
+# - Generated token: write {{token}}.
+# - Body: use `json:` for JSON bodies, `form:` for x-www-form-urlencoded, `body:` for raw text.
+
+token:
+  method: POST
+  url: https://ushc.api.capillarytech.com/v3/oauth/token/generate
+  headers:
+    Content-Type: application/json
+  json:
+    key: ${B2B_KEY}
+    secret: ${B2B_SECRET}
+  token_path: data.accessToken
+
+apis:
+  - name: Reward Earning Details
+    expected_status: [200]
+    request:
+      method: GET
+      url: https://ushc.intouch.capillarytech.com/api_gateway/neo/api/v1/xto6x/execute/externalAPI/reward-earning-details?efid=q57fDfgtlLZ1PG9oCART%2B9OzXnEo3jcJ9lD%3AyRgk8nD1&client=pseudomenudo
+      headers:
+        x-cap-api-oauth-token: "{{token}}"
+
+  - name: Program Overview
+    expected_status: [200]
+    request:
+      method: GET
+      url: https://ushc.intouch.capillarytech.com/api_gateway/neo/api/v1/xto6x/execute/externalAPI/program-overview?efid=GsYIOZzi5wNVwRxM3C5eb2wKtntKeb88h8aj4ptrdLqx&client=pseudomenudo
+      headers:
+        x-cap-api-oauth-token: "{{token}}"
+
+  - name: Rewardable Activities
+    expected_status: [200]
+    request:
+      method: GET
+      url: https://ushc.intouch.capillarytech.com/api_gateway/neo/api/v1/xto6x/execute/externalAPI/rewardable-activities?efid=q57fDfgtlLZ1PG9oCART%2B9OzXnEo3jcJ9lD%3AyRgk8nD1&client=pseudomenudo
+      headers:
+        x-cap-api-oauth-token: "{{token}}"
+
+  - name: Rewardable Amounts
+    expected_status: [200]
+    request:
+      method: GET
+      url: https://ushc.intouch.capillarytech.com/api_gateway/neo/api/v1/xto6x/execute/externalAPI/rewardable-amounts?efid=q57fDfgtlLZ1PG9oCART%2B9OzXnEo3jcJ9lD%3AyRgk8nD1&client=pseudomenudo
+      headers:
+        x-cap-api-oauth-token: "{{token}}"
+
+  - name: Reward Redemption Fulfilment
+    expected_status: [200]
+    request:
+      method: GET
+      url: https://ushc.intouch.capillarytech.com/api_gateway/neo/api/v1/xto6x/execute/externalAPI/reward-redemption-fufilment?efid=q57fDfgtlLZ1PG9oCART%2B9OzXnEo3jcJ9lD%3AyRgk8nD1&client=pseudomenudo
+      headers:
+        x-cap-api-oauth-token: "{{token}}"

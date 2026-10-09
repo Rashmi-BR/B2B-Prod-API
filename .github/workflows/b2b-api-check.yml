@@ -1,0 +1,38 @@
+name: B2B Prod API Check
+
+on:
+  schedule:
+    - cron: "30 3 * * *"   # 09:00 AM IST
+    - cron: "30 15 * * *"  # 09:00 PM IST
+  workflow_dispatch:        # allows manual "Run workflow" button
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Run API checks
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          B2B_KEY: ${{ secrets.B2B_KEY }}
+          B2B_SECRET: ${{ secrets.B2B_SECRET }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: python run_checks.py
+
+      - name: Upload responses
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: responses-${{ github.run_id }}
+          path: responses/
+          retention-days: 14
+          if-no-files-found: ignore
